@@ -2,8 +2,7 @@ import 'package:command_palette/command_palette.dart';
 import 'package:flutter/material.dart';
 import 'package:woozy_search/woozy_search.dart';
 
-class CommandPaletteControllerProvider
-    extends InheritedNotifier<CommandPaletteController> {
+class CommandPaletteControllerProvider extends InheritedNotifier<CommandPaletteController> {
   late final CommandPaletteController controller;
 
   // ignore: prefer_const_constructors_in_immutables
@@ -14,9 +13,7 @@ class CommandPaletteControllerProvider
   }) : super(key: key, child: child, notifier: controller);
 
   static CommandPaletteController of(BuildContext context) {
-    return context
-        .dependOnInheritedWidgetOfExactType<CommandPaletteControllerProvider>()!
-        .controller;
+    return context.dependOnInheritedWidgetOfExactType<CommandPaletteControllerProvider>()!.controller;
   }
 }
 
@@ -53,7 +50,7 @@ class CommandPaletteController extends ChangeNotifier {
 
     if (!_disposed) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        textEditingController.text = "";
+        if (!_disposed) textEditingController.text = "";
       });
     }
   }
@@ -120,11 +117,9 @@ class CommandPaletteController extends ChangeNotifier {
       // reset highlight position on re-filtering.
       highlightedAction = 0;
 
-      if (currentlySelectedAction?.actionType ==
-          CommandPaletteActionType.nested) {
+      if (currentlySelectedAction?.actionType == CommandPaletteActionType.nested) {
         filteredActions = currentlySelectedAction!.childrenActions!;
-      } else if (currentlySelectedAction?.actionType ==
-          CommandPaletteActionType.input) {
+      } else if (currentlySelectedAction?.actionType == CommandPaletteActionType.input) {
         filteredActions = [];
       } else {
         filteredActions = actions;
@@ -180,18 +175,15 @@ class CommandPaletteController extends ChangeNotifier {
       return;
     }
     if (down) {
-      highlightedAction =
-          (highlightedAction + 1) % _filteredActionsCache.length;
+      highlightedAction = (highlightedAction + 1) % _filteredActionsCache.length;
     } else {
-      highlightedAction =
-          (highlightedAction - 1) % _filteredActionsCache.length;
+      highlightedAction = (highlightedAction - 1) % _filteredActionsCache.length;
     }
     notifyListeners();
   }
 
   /// Performs the required handling for the given action
-  void handleAction(BuildContext context,
-      {required CommandPaletteAction action}) {
+  void handleAction(BuildContext context, {required CommandPaletteAction action}) {
     if (action.actionType == CommandPaletteActionType.single) {
       action.onSelect!();
       if (Navigator.of(context).canPop()) {
@@ -215,8 +207,7 @@ class CommandPaletteController extends ChangeNotifier {
 
   /// performs the action which is currently selected by [highlightedAction]
   void performHighlightedAction(BuildContext context) {
-    if (_currentlySelectedAction?.actionType ==
-        CommandPaletteActionType.input) {
+    if (_currentlySelectedAction?.actionType == CommandPaletteActionType.input) {
       handleActionInput(context);
     } else {
       handleAction(context, action: _filteredActionsCache[highlightedAction]);
@@ -227,8 +218,7 @@ class CommandPaletteController extends ChangeNotifier {
 /// Default filter for actions. Splits the entered query, and then wraps it in
 /// groups and wild cards
 // ignore: prefer_function_declarations_over_variables
-final ActionFilter kDefaultFilter =
-    (String query, List<CommandPaletteAction> actions) {
+final ActionFilter kDefaultFilter = (String query, List<CommandPaletteAction> actions) {
   if (query.isEmpty) {
     return actions;
   }
