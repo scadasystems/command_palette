@@ -57,8 +57,7 @@ class CommandPalette extends InheritedWidget {
   }
 
   static CommandPalette of(BuildContext context) {
-    final CommandPalette? result =
-        context.dependOnInheritedWidgetOfExactType<CommandPalette>();
+    final CommandPalette? result = context.dependOnInheritedWidgetOfExactType<CommandPalette>();
     assert(result != null, "No CommandPalette in context");
     return result!;
   }
@@ -100,9 +99,7 @@ class CommandPalette extends InheritedWidget {
   bool equals(Object other) {
     if (identical(this, other)) return true;
 
-    return other is CommandPalette &&
-        listEquals(other.actions, actions) &&
-        other.config == config;
+    return other is CommandPalette && listEquals(other.actions, actions) && other.config == config;
   }
 }
 
@@ -179,8 +176,7 @@ class _CommandPaletteInnerState extends State<_CommandPaletteInner> {
 
   /// Initialize all the styles and stuff
   void _initStyle() {
-    CommandPaletteStyle styleToCopy =
-        widget.config.style ?? const CommandPaletteStyle();
+    CommandPaletteStyle styleToCopy = widget.config.style ?? const CommandPaletteStyle();
 
     var newActionLabelTextStyle = styleToCopy.actionLabelTextStyle ??
         Theme.of(context).primaryTextTheme.titleMedium?.copyWith(
@@ -188,8 +184,7 @@ class _CommandPaletteInnerState extends State<_CommandPaletteInner> {
             );
     _style = CommandPaletteStyle(
       actionColor: styleToCopy.actionColor ?? Theme.of(context).canvasColor,
-      selectedColor:
-          styleToCopy.selectedColor ?? Theme.of(context).highlightColor,
+      selectedColor: styleToCopy.selectedColor ?? Theme.of(context).highlightColor,
       actionLabelTextStyle: newActionLabelTextStyle,
       highlightedLabelTextStyle: styleToCopy.highlightedLabelTextStyle ??
           Theme.of(context).primaryTextTheme.titleMedium?.copyWith(
@@ -206,13 +201,10 @@ class _CommandPaletteInnerState extends State<_CommandPaletteInner> {
       elevation: styleToCopy.elevation,
       highlightSearchSubstring: styleToCopy.highlightSearchSubstring,
       textFieldInputDecoration: styleToCopy.textFieldInputDecoration == null
-          ? kDefaultInputDecoration
-              .applyDefaults(Theme.of(context).inputDecorationTheme)
-          : styleToCopy.textFieldInputDecoration!
-              .applyDefaults(Theme.of(context).inputDecorationTheme),
+          ? kDefaultInputDecoration.applyDefaults(Theme.of(context).inputDecorationTheme)
+          : styleToCopy.textFieldInputDecoration!.applyDefaults(Theme.of(context).inputDecorationTheme),
       prefixNestedActions: styleToCopy.prefixNestedActions,
-      instructionColor: styleToCopy.instructionColor ??
-          newActionLabelTextStyle?.color?.withOpacity(.84),
+      instructionColor: styleToCopy.instructionColor ?? newActionLabelTextStyle?.color?.withOpacity(.84),
       barrierFilter: styleToCopy.barrierFilter,
     );
 
@@ -232,13 +224,10 @@ class _CommandPaletteInnerState extends State<_CommandPaletteInner> {
       child: Builder(
         builder: (context) {
           return Shortcuts(
-            shortcuts: {
-              widget.config.openKeySet: const _OpenCommandPaletteIntent()
-            },
+            shortcuts: {widget.config.openKeySet: const _OpenCommandPaletteIntent()},
             child: Actions(
               actions: {
-                _OpenCommandPaletteIntent:
-                    CallbackAction<_OpenCommandPaletteIntent>(
+                _OpenCommandPaletteIntent: CallbackAction<_OpenCommandPaletteIntent>(
                   // ignore: body_might_complete_normally_nullable
                   onInvoke: (_) => _openCommandPalette(context),
                 )
@@ -266,7 +255,7 @@ class _CommandPaletteInnerState extends State<_CommandPaletteInner> {
         .push(
           CommandPaletteModal(
             hintText: widget.config.hintText,
-
+            style: widget.config.style?.searchTextFieldStyle,
             // we pass the controller in so that it can be re-provided within the
             // tree of the modal
             commandPaletteController: widget.controller,

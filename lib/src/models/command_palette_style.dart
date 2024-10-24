@@ -49,6 +49,9 @@ class CommandPaletteStyle {
   /// ```
   final TextStyle? actionDescriptionTextStyle;
 
+  /// Text style for the text field
+  final TextStyle? searchTextFieldStyle;
+
   /// Determines whether or not matching characters in action labels are
   /// highlighted while searching.
   ///
@@ -116,6 +119,7 @@ class CommandPaletteStyle {
     this.highlightedLabelTextStyle,
     this.highlightSearchSubstring = true,
     this.actionDescriptionTextStyle,
+    this.searchTextFieldStyle,
     this.elevation = 4.0,
     this.borderRadius = const BorderRadius.all(Radius.circular(5)),
     this.actionLabelTextAlign = TextAlign.left,

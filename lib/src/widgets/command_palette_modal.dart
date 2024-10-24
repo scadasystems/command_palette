@@ -18,6 +18,9 @@ class CommandPaletteModal extends ModalRoute<void> {
   /// See [CommandPalette.hintText]
   final String hintText;
 
+  // FIXED: Add style
+  final TextStyle? style;
+
   /// controller for the command palette. Passed into the modal so that it can
   /// be distributed among this route
   final CommandPaletteController commandPaletteController;
@@ -41,6 +44,7 @@ class CommandPaletteModal extends ModalRoute<void> {
   /// [transitionCurve] The curve used when fading the modal in and out
   CommandPaletteModal({
     required this.hintText,
+    required this.style,
     required this.commandPaletteController,
     required Duration transitionDuration,
     required Curve transitionCurve,
@@ -51,15 +55,13 @@ class CommandPaletteModal extends ModalRoute<void> {
         super(filter: filter);
 
   @override
-  Color? get barrierColor =>
-      commandPaletteController.style.commandPaletteBarrierColor;
+  Color? get barrierColor => commandPaletteController.style.commandPaletteBarrierColor;
 
   @override
   bool get barrierDismissible => true;
 
   @override
-  String? get barrierLabel =>
-      "Command Palette barrier. Clicking on the barrier will dismiss the command palette";
+  String? get barrierLabel => "Command Palette barrier. Clicking on the barrier will dismiss the command palette";
 
   @override
   bool get maintainState => false;
@@ -87,15 +89,11 @@ class CommandPaletteModal extends ModalRoute<void> {
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             // figure out size and positioning for the modal
-            double height = commandPaletteController.config.height ??
-                constraints.maxHeight * (6 / 8);
-            double width = commandPaletteController.config.width ??
-                constraints.maxWidth * (6 / 8);
+            double height = commandPaletteController.config.height ?? constraints.maxHeight * (6 / 8);
+            double width = commandPaletteController.config.width ?? constraints.maxWidth * (6 / 8);
 
-            double top = commandPaletteController.config.top ??
-                constraints.maxHeight * (1 / 8);
-            double left = commandPaletteController.config.left ??
-                constraints.maxWidth * (1 / 8);
+            double top = commandPaletteController.config.top ?? constraints.maxHeight * (1 / 8);
+            double left = commandPaletteController.config.left ?? constraints.maxWidth * (1 / 8);
             double? bottom = commandPaletteController.config.bottom;
             double? right = commandPaletteController.config.right;
 
@@ -108,38 +106,30 @@ class CommandPaletteModal extends ModalRoute<void> {
                   right: right,
                   child: Shortcuts(
                     shortcuts: {
-                      const SingleActivator(LogicalKeyboardKey.backspace):
-                          const _BackspaceIntent(),
-                      const SingleActivator(LogicalKeyboardKey.arrowDown):
-                          const _DownArrowIntent(),
-                      const SingleActivator(LogicalKeyboardKey.arrowUp):
-                          const _UpArrowIntent(),
-                      const SingleActivator(LogicalKeyboardKey.enter):
-                          const _EnterIntent(),
+                      const SingleActivator(LogicalKeyboardKey.backspace): const _BackspaceIntent(),
+                      const SingleActivator(LogicalKeyboardKey.arrowDown): const _DownArrowIntent(),
+                      const SingleActivator(LogicalKeyboardKey.arrowUp): const _UpArrowIntent(),
+                      const SingleActivator(LogicalKeyboardKey.enter): const _EnterIntent(),
                       closeKeySet: const _CloseIntent(),
                     },
                     child: Actions(
                       actions: {
                         _BackspaceIntent: _BackspaceAction(
-                          onInvoke: (intent) =>
-                              commandPaletteController.gotoParentAction(),
+                          onInvoke: (intent) => commandPaletteController.gotoParentAction(),
                           controller: commandPaletteController,
                         ),
                         _DownArrowIntent: CallbackAction<_DownArrowIntent>(
-                          onInvoke: (intent) =>
-                              commandPaletteController.movedHighlightedAction(
+                          onInvoke: (intent) => commandPaletteController.movedHighlightedAction(
                             down: true,
                           ),
                         ),
                         _UpArrowIntent: CallbackAction<_UpArrowIntent>(
-                          onInvoke: (intent) =>
-                              commandPaletteController.movedHighlightedAction(
+                          onInvoke: (intent) => commandPaletteController.movedHighlightedAction(
                             down: false,
                           ),
                         ),
                         _EnterIntent: CallbackAction<_EnterIntent>(
-                          onInvoke: (intent) => commandPaletteController
-                              .performHighlightedAction(context),
+                          onInvoke: (intent) => commandPaletteController.performHighlightedAction(context),
                         ),
                         _CloseIntent: CallbackAction<_CloseIntent>(
                           onInvoke: (intent) => Navigator.of(context).pop(),
@@ -153,8 +143,8 @@ class CommandPaletteModal extends ModalRoute<void> {
                             children: [
                               CommandPaletteTextField(
                                 hintText: hintText,
-                                onSubmit: () => commandPaletteController
-                                    .performHighlightedAction(context),
+                                style: style,
+                                onSubmit: () => commandPaletteController.performHighlightedAction(context),
                               ),
                               const Flexible(
                                 child: CommandPaletteBody(),

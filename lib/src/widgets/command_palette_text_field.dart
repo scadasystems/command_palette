@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: library_private_types_in_public_api
 
 import 'dart:io';
@@ -12,18 +13,21 @@ class CommandPaletteTextField extends StatefulWidget {
   /// See [CommandPalette.hintText]
   final String hintText;
 
+  // FIXED: Add style
+  final TextStyle? style;
+
   /// The field has been submitted. Only gets called on Android and iOS
   final VoidCallback onSubmit;
 
   const CommandPaletteTextField({
-    required this.hintText,
-    required this.onSubmit,
     Key? key,
+    required this.hintText,
+    required this.style,
+    required this.onSubmit,
   }) : super(key: key);
 
   @override
-  _CommandPaletteTextFieldState createState() =>
-      _CommandPaletteTextFieldState();
+  _CommandPaletteTextFieldState createState() => _CommandPaletteTextFieldState();
 }
 
 class _CommandPaletteTextFieldState extends State<CommandPaletteTextField> {
@@ -52,23 +56,19 @@ class _CommandPaletteTextFieldState extends State<CommandPaletteTextField> {
 
   @override
   Widget build(BuildContext context) {
-    final CommandPaletteController controller =
-        CommandPaletteControllerProvider.of(context);
+    final CommandPaletteController controller = CommandPaletteControllerProvider.of(context);
     final style = controller.style;
     InputDecoration inputDecoration = style.textFieldInputDecoration!;
 
     // if no prefix was provided, the selected action is a nested action, and
     // the user indicates that they want nested actions to have prefix text,
     // then we'll create prefix text with the nested action's parent's label
-    final bool styleHasNoPrefix = inputDecoration.prefix == null &&
-        inputDecoration.prefixIcon == null &&
-        inputDecoration.prefixText == null;
+    final bool styleHasNoPrefix =
+        inputDecoration.prefix == null && inputDecoration.prefixIcon == null && inputDecoration.prefixText == null;
     if (styleHasNoPrefix &&
         style.prefixNestedActions &&
-        (controller.currentlySelectedAction?.actionType ==
-                CommandPaletteActionType.nested ||
-            controller.currentlySelectedAction?.actionType ==
-                CommandPaletteActionType.input)) {
+        (controller.currentlySelectedAction?.actionType == CommandPaletteActionType.nested ||
+            controller.currentlySelectedAction?.actionType == CommandPaletteActionType.input)) {
       inputDecoration = inputDecoration.copyWith(
         prefixText: "${controller.currentlySelectedAction!.label}: ",
         hintText: "",
@@ -85,6 +85,7 @@ class _CommandPaletteTextFieldState extends State<CommandPaletteTextField> {
       child: TextField(
         controller: controller.textEditingController,
         textInputAction: TextInputAction.done,
+        style: widget.style,
         focusNode: _focusNode,
         decoration: inputDecoration,
         onSubmitted: (val) {
